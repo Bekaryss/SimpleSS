@@ -1,0 +1,81 @@
+﻿<h1>People Admin Page</h1>
+<ng-template #create>
+    <h3>Create New People </h3>
+</ng-template>
+<div>
+    <form [formGroup]="peopleForm" (ngSubmit)="onPeopleFormSubmit()">
+        <table class="table">
+            <tr>
+                <td>Select Category</td>
+                <td>
+                    <select formControlName="categoryId">
+                        <option *ngFor="let category of categoryList" [ngValue]="category.id">{{ category.name }}</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Enter Full Name</td>
+                <td>
+                    <input formControlName="fullName">
+                    <label *ngIf="peopleForm.get('fullName').invalid && processValidation" [ngClass]="'error'">FullName is required. </label>
+                </td>
+            </tr>
+            <tr>
+                <td>Enter Rating from 1 to 5</td>
+                <td>
+                    <input type="number" formControlName="rating" min="1" max="5">
+                    <label *ngIf="peopleForm.get('rating').invalid && processValidation" [ngClass]="'error'">Rating is required. </label>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <button *ngIf="peopleIdToUpdate == -1">CREATE</button>
+                    <button *ngIf="peopleIdToUpdate != -1">UPDATE</button>
+                    <button (click)="backToCreatePeople()" *ngIf="peopleIdToUpdate != -1">Go Back</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <br />
+    <div *ngIf="statusCode">
+        <!--else processing-->
+        <div *ngIf="statusCode === 201" [ngClass]="'success'">
+            People added successfully.
+        </div>
+        <div *ngIf="statusCode === 409" [ngClass]="'success'">
+            People already exists.
+        </div>
+        <div *ngIf="statusCode === 200" [ngClass]="'success'">
+            People updated successfully.
+        </div>
+        <div *ngIf="statusCode === 204" [ngClass]="'success'">
+            People deleted successfully.
+        </div>
+        <div *ngIf="statusCode === 500" [ngClass]="'error'">
+            Internal Server Error.
+        </div>
+    </div>
+</div>
+<p *ngIf="!peopleList"><em>Loading...</em></p>
+<table class='table' *ngIf="peopleList">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Category</th>
+            <th>FullName</th>
+            <th>Rating</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of peopleList">
+            <td>{{ item.id }}</td>
+            <td>{{ item.category.name }}</td>
+            <td>{{ item.fullName }}</td>
+            <td>{{ item.rating }}</td>
+            <td><button type="button" (click)="loadPeopleToEdit(item.id)">Edit</button> </td>
+            <td><button type="button" (click)="deletePeople(item.id)">Delete</button></td>
+        </tr>
+    </tbody>
+</table>

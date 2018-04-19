@@ -1,0 +1,22 @@
+﻿<h1>Report</h1>
+<p *ngIf="!reportList"><em>Loading...</em></p>
+<table class='table' *ngIf="reportList">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Count</th>
+            <th>Max</th>
+            <th>Min</th>
+            <th>Average</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of reportList">
+            <td>{{ item.name }}</td>
+            <td>{{ item.count }}</td>
+            <td>{{ item.max }}</td>
+            <td>{{ item.min }}</td>
+            <td>{{ item.average }}</td>
+        </tr>
+    </tbody>
+</table>
